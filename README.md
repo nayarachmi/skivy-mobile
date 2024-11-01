@@ -1,5 +1,5 @@
-## Tugas 7
-# Membuat Program Flutter Baru
+# Tugas 7
+## Membuat Program Flutter Baru
 Pertama saya membuka terminal dan mengarahkannya pada direktori tertentu, lalu membuat proyek flutter dengan perintah `flutter create skivy_mobile` setelah proyek berhasil dibuat, saya membukanya dengan VSCode
 
 ## Membuat 3 Tombol Sederhana dengan Ikon & Teks
