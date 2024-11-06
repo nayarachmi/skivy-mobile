@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:skivy_mobile/widgets/left_drawer.dart';
+import 'package:skivy_mobile/widgets/product_cart.dart';
 
 class MyHomePage extends StatelessWidget {
   final String npm = '2306230685';
@@ -19,6 +21,7 @@ class MyHomePage extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
+      drawer: const LeftDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -96,65 +99,6 @@ class InfoCard extends StatelessWidget {
             const SizedBox(height: 8.0),
             Text(content),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class ItemHomepage {
-  final String name;
-  final IconData icon;
-
-  ItemHomepage(this.name, this.icon);
-}
-
-class ItemCard extends StatelessWidget {
-  final ItemHomepage item;
-  final int colorIndex;
-
-  ItemCard(this.item, {super.key, required this.colorIndex});
-
-  // Define a list of colors for each button
-  final List<Color> buttonColors = [
-    Colors.pinkAccent,
-    Colors.orangeAccent,
-    Colors.blueAccent,
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: buttonColors[colorIndex % buttonColors.length],
-      borderRadius: BorderRadius.circular(12),
-      child: InkWell(
-        onTap: () {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!"))
-            );
-        },
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  item.icon,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
-                const Padding(padding: EdgeInsets.all(3)),
-                Text(
-                  item.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-          ),
         ),
       ),
     );
