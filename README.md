@@ -1,3 +1,76 @@
+# Tugas 8
+## Kegunaan, Keuntungan, dan Waktu Menggunakan `const` pada Flutter
+`const` di Flutter digunakan untuk mendeklarasikan nilai yang konstan atau tidak berubah sepanjang eksekusi aplikasi. Ketika kita menambahkan kata kunci `const` pada sebuah widget, itu berarti widget tersebut tidak akan diubah atau diperbarui lagi setelah dibangun, yang memungkinkan Flutter untuk mengoptimalkan penggunaan memori dan rendering. Hal ini membuat aplikasi lebih cepat karena Flutter dapat memanfaatkan widget yang telah ada di memori, bukan membuat ulang widget yang sama.
+
+Keuntungannya ialah:
+- Efisiensi Memori: Flutter dapat menghindari membuat instansi baru dari widget yang sama berulang kali
+- Performa Lebih Baik: Menggunakan widget `const` membantu mengurangi jumlah pembaruan pada widget tree yang meningkatkan performa aplikasi
+- Menjaga Konsistensi: `const` memastikan bahwa nilai atau objek tidak berubah setelah dibuat, yang membuat kode lebih mudah untuk dipelihara
+
+`const` sebaiknya digunakan Saat widget yang digunakan tidak perlu diperbarui setelah pertama kali dibuat, misalnya pada widget yang hanya berfungsi untuk menampilkan statis konten. Lalu `const` sebaiknya tidak digunakan Ketika widget atau objek tersebut harus berubah berdasarkan input atau state tertentu
+
+## Penggunaan Column dan Row pads Flutter
+`Column ` dan `row` adalah widget layout di Flutter yang digunakan untuk menyusun widget lainnya dalam bentuk vertikal (Column) atau horizontal (Row)
+
+### `Column`
+Digunakan untuk menyusun widget secara vertikal, widget yang ditempatkan dalam `Column` akan tampil dari atas ke bawah. Contoh implementasi:
+``` dart
+Column(
+  children: <Widget>[
+    Text('Item 1'),
+    Text('Item 2'),
+    Text('Item 3'),
+  ],
+)
+```
+
+### `Row`
+Digunakan untuk menyusun widget secara horizontal, widget yang ditempatkan dalam `row` akan tampil dari kiri ke kanan. Contoh implementasi:
+``` dart
+Row(
+  children: <Widget>[
+    Icon(Icons.home),
+    Icon(Icons.search),
+    Icon(Icons.settings),
+  ],
+)
+```
+
+## Elemen Input yang Digunakan dan yang Tidak Digunakan
+Elemen input yang digunakan:
+- TextFormField: Digunakan untuk memasukkan nama produk, deskripsi produk, dan jumlah produk (amount). Setiap input memiliki validator untuk memastikan data yang dimasukkan valid, seperti memastikan nama dan deskripsi tidak kosong, dan jumlah berupa angka
+
+Elemen yang tidak digunakan:
+- Checkbox: Untuk pilihan biner (misalnya, status aktif/non-aktif
+- Radio: Untuk pilihan tunggal dari beberapa opsi
+- DropdownButton: Untuk memilih dari daftar pilihan
+- Switch: Untuk status aktif/non-aktif, dapat digunakan sebagai alternatif checkbox
+
+Keputusan Tidak Menggunakan Elemen Lain adalah karena Pada form ini, hanya diperlukan input teks dan angka, karena fokusnya adalah untuk memasukkan data produk sederhana. Elemen input lain seperti dropdown atau checkbox tidak relevan dalam konteks tugas ini.
+
+## Cara Mengatur Konsistensi Tema dan Apakah Diimplementasikan
+Menggunakan `ThemeData` untuk menetapkan tema global yang dapat diterapkan ke seluruh aplikasi. Contoh implementasi tema di aplikasi ini bisa dilihat di kode berikut:
+```dart
+theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.pink,
+        ).copyWith(secondary: Colors.pinkAccent[100]),
+        useMaterial3: true,
+      ),
+```
+Dengan cara ini, tema yang ditetapkan akan digunakan secara konsisten di seluruh aplikasi. Pada aplikasi ini saya sudah mengimplementasikan tema menggunakan `Theme.of(context).colorScheme.primary` pada bagian `AppBar` dan tombol. Tema ini mengatur konsistensi warna di aplikasi sehingga elemen UI terlihat seragam atau sama
+
+## Cara Menangani Navigasi dalam Aplikasi dengan Banyak Halaman pada Flutter
+Navigasi antar halaman dalam Flutter bisa dilakukan dengan menggunakan `Navigator` yang memungkinkan kita berpindah antar halaman menggunakan `Navigator.push()` atau kembali ke halaman sebelumnya menggunakan `Navigator.pop()`. Contoh implementasi:
+```dart
+Navigator.push(
+  context,
+  MaterialPageRoute(builder: (context) => HalamanBaru()),
+);
+
+Navigator.pop(context);
+```
+
 # Tugas 7
 ## Membuat Program Flutter Baru
 Pertama saya membuka terminal dan mengarahkannya pada direktori tertentu, lalu membuat proyek flutter dengan perintah `flutter create skivy_mobile` setelah proyek berhasil dibuat, saya membukanya dengan VSCode
