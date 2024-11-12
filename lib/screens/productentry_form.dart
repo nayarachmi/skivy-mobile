@@ -101,8 +101,13 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                     if (int.tryParse(value) == null) {
                       return "Amount harus berupa angka!";
                     }
+                    if (int.parse(value) <= 0) {
+                      return "Amount tidak boleh negatif dan nol!";
+                    }
+
                     return null;
                   },
+
                 ),
               ),
               Align(
