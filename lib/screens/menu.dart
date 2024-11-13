@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skivy_mobile/widgets/left_drawer.dart';
-import 'package:skivy_mobile/widgets/product_cart.dart';
+import 'package:skivy_mobile/widgets/product_card.dart';
 
 class MyHomePage extends StatelessWidget {
   final String npm = '2306230685';

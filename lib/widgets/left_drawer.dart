@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:skivy_mobile/screens/list_productentry.dart';
 import 'package:skivy_mobile/screens/menu.dart';
 import 'package:skivy_mobile/screens/productentry_form.dart';
 
@@ -64,6 +65,19 @@ class LeftDrawer extends StatelessWidget {
                     ));
               },
             ),
+            // Kode ListTile Menu
+            ListTile(
+                leading: const Icon(Icons.shop_2),
+                title: const Text('Daftar Produk'),
+                onTap: () {
+                    // Route menu ke halaman produk
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ProductEntryPage()),
+                    );
+                },
+            ),
+
         ],
       ),
     );
