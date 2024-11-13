@@ -1,3 +1,30 @@
+# Tugas 9
+## Mengapa Perlu Membuat Model untuk Pengambilan atau Pengiriman Data JSON?
+Model berfungsi sebagai representasi struktural dari data yang dikirim dan diterima, memastikan bahwa data yang diterima dari server atau dikirim ke server sesuai dengan format yang diharapkan. Dengan model, kita dapat memvalidasi dan mengatur data JSON menjadi objek yang mudah digunakan dalam aplikasi. Jika tidak membuat model terlebih dahulu, data yang diterima mungkin sulit diakses atau diproses, yang berpotensi menyebabkan error atau data yang tidak konsisten.
+
+Jika kita tidak membuat model terlebih dahulu, kita tetap dapat melakukan parsing manual terhadap data JSON, tetapi ini bisa menyebabkan kode menjadi lebih kompleks, rentan terhadap kesalahan, dan sulit dikelola. Error dapat terjadi jika struktur JSON berubah atau data diakses dengan cara yang salah, karena tidak ada tipe data yang terdefinisi dengan baik.
+
+## Fungsi Library `http`
+Library `http` di Flutter berfungsi untuk mengirim dan menerima data melalui protokol HTTP. Ini memungkinkan aplikasi melakukan permintaan HTTP seperti `GET`, `POST`, `PUT`, dan `DELETE` ke server. Pada tugas ini, `http` digunakan untuk membuat koneksi ke server Django untuk mengambil data dan mengirim data seperti hasil formulir pengguna.
+
+## Fungsi `CookieRequest` dan Pembagiannya
+`CookieRequest` adalah kelas yang digunakan untuk menangani permintaan HTTP yang membutuhkan sesi berbasis cookie. Ini memudahkan pengelolaan sesi login pengguna, sehingga sesi dapat dipertahankan di seluruh aplikasi. Penting untuk membagikan instance `CookieRequest` ke semua komponen agar data sesi konsisten di seluruh aplikasi dan fitur autentikasi dapat berfungsi dengan baik, seperti melacak status login pengguna.
+
+## Mekanisme Pengiriman Data dari Input ke Tampilan
+1. Pengguna mengisi formulir di Flutter dan menekan tombol submit.
+2. Aplikasi memvalidasi input dan mengirimkan data menggunakan permintaan HTTP (misalnya `POST`) melalui `CookieRequest` atau `http`.
+3. Data diterima oleh server Django, diproses, dan disimpan di database.
+Server mengembalikan respons (biasanya dalam format JSON) yang diolah di Flutter.
+4. Data yang dikembalikan ditampilkan pada antarmuka pengguna di aplikasi Flutter.
+
+## Mekanisme Autentikasi (Login, Register, Logout)
+- Login: Pengguna memasukkan kredensial (username dan password) di Flutter. Permintaan dikirim ke server Django untuk diverifikasi. Jika berhasil, server mengembalikan cookie sesi yang disimpan oleh CookieRequest di Flutter, menandakan bahwa pengguna telah berhasil login.
+
+- Register: Pengguna memasukkan data akun di formulir Flutter dan data dikirim ke endpoint Django untuk membuat akun baru. Jika berhasil, akun baru dibuat di database.
+
+- Logout: Pengguna menekan tombol logout di Flutter, yang memicu permintaan ke server Django untuk menghapus sesi. Django merespons dengan menghapus cookie sesi, dan Flutter menghapus status sesi pengguna.
+
+
 # Tugas 8
 ## Kegunaan, Keuntungan, dan Waktu Menggunakan `const` pada Flutter
 `const` di Flutter digunakan untuk mendeklarasikan nilai yang konstan atau tidak berubah sepanjang eksekusi aplikasi. Ketika kita menambahkan kata kunci `const` pada sebuah widget, itu berarti widget tersebut tidak akan diubah atau diperbarui lagi setelah dibangun, yang memungkinkan Flutter untuk mengoptimalkan penggunaan memori dan rendering. Hal ini membuat aplikasi lebih cepat karena Flutter dapat memanfaatkan widget yang telah ada di memori, bukan membuat ulang widget yang sama.
@@ -9,7 +36,7 @@ Keuntungannya ialah:
 
 `const` sebaiknya digunakan Saat widget yang digunakan tidak perlu diperbarui setelah pertama kali dibuat, misalnya pada widget yang hanya berfungsi untuk menampilkan statis konten. Lalu `const` sebaiknya tidak digunakan Ketika widget atau objek tersebut harus berubah berdasarkan input atau state tertentu
 
-## Penggunaan Column dan Row pads Flutter
+## Penggunaan Column dan Row pada Flutter
 `Column ` dan `row` adalah widget layout di Flutter yang digunakan untuk menyusun widget lainnya dalam bentuk vertikal (Column) atau horizontal (Row)
 
 ### `Column`
