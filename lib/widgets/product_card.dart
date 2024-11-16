@@ -41,15 +41,16 @@ class ItemCard extends StatelessWidget {
               SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!"))
             );
 
+
           // Add logic to navigate to a new page if the item name is "Lihat Produk" or "Tambah Produk"
-          if (item.name == "Lihat Produk") {
+          if (item.name == "Lihat Product") {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const ProductEntryPage(), // Sesuaikan dengan nama halaman
               ),
             );
-          } else if (item.name == "Tambah Produk") {
+          } else if (item.name == "Tambah Product") {
             Navigator.push(
               context,
               MaterialPageRoute(
