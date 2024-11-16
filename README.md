@@ -1,23 +1,240 @@
 # Tugas 9
-## Mengapa Perlu Membuat Model untuk Pengambilan atau Pengiriman Data JSON?
+## Mengimplementasikan Fitur Registrasi Akun Pada Proyek Tugas Flutter
+Membuat model pada django yang digunakan untuk registrasi lalu membuat view untuk menangani permintaan POST untuk registrasi dan menambahkan path di `urls.py` untuk mengakses view. Setelah itu pastikan django diatur agar menerima permintaan dari aplikasi Flutter dengan menambahkan `django-cors-headers` pada `INSTALLED_APPS`. Lalu membuat halaman register di Flutter dan mengimplementasikan UI nya, juga memastikan `TextFormField` untuk username dan password.
+
+## Membuat Halaman Login Pada Proyek Tugas Flutter
+Memastika bahwa proyek Django sudah memiliki model untuk menangani autentikasi. Lalu membuat endpoint di Django yang dapat menerima permintaan POST untuk login dan merespons dengan token atau cookie autentikasi dan menambahkan routing di `urls.py`. Setelahnya membuat halaman login pafa Flutter dan mengimplementasikan UI nya, juga memastikan terdapat dua `TextField` untuk input username dan password
+
+## Mengintegrasikan Sistem Autentikasi Django dengan Proyek Tugas Flutter
+Membuat `django-app` pada proyek sebelumnya dengan nama `authentication` lalu menambahlan ke `INSTALLED_APPS`, seperti yang sudah disebutkan sebelumnya menambahkan `corsheaders` juga ke `INSTALLED_APPS` dan menambahkan `corsheaders.middleware.CorsMiddleware` ke `MIDDLEWARE`. Lalu menambahkan beberapa variabel pada `settings.py`
+
+## Membuat Model Kustom Sesuai dengan Proyek Aplikasi Django
+Model dapat dibuat pada path `lib/models/` dengan bantuan JSON data item pada aplikasi Django
+
+## Membuat Halaman yang Berisi Daftar Semua Item yang Terdapat pada Endpoint JSON di Django yang Telah Di Deploy
+### Tampilkan Name, Price, dan Description dari Masing-Masing Item pada Halaman Ini
+Memastikan endpoint di Django sudah mengembalikan data JSON dalam format yang benar sesuai dengan model yang diharapkan oleh Flutter. Lalu mengambil data JSON di Flutter dan menulis fungsi untuk mengambil data dari endpoint Django. Selanjutnya menampilkan data dala UI untuk menampilkan nama, deskripsi, dan harga tiap produk
+
+## Membuat Halaman Detail untuk Setiap Item yang Terdapat Pada Halaman Daftar Item
+Membuat halaman baru untuk menampilkan detail produk. Halaman ini akan menampilkan atribut lengkap dari produk yang dipilih
+``` Dart
+class ProductDetailPage extends StatelessWidget {
+  final ProductEntry product;
+
+  const ProductDetailPage({Key? key, required this.product}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(product.fields.name),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Name: ${product.fields.name}',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Description: ${product.fields.description}',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Price: \$${product.fields.price}',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Skin Type: ${product.fields.skinType}',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'User: ${product.fields.user}',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context); // Kembali ke halaman sebelumnya
+              },
+              child: Text('Back to Product List'),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+## Navigasi dari Daftar Item ke Halaman Detail
+Pada halaman daftar item, menambahkan `inkwell` untuk mendeteksi tap pada item dan mengarahkan pengguna ke halaman detail produk
+``` dart
+ListView.builder(
+  itemCount: snapshot.data!.length,
+  itemBuilder: (_, index) => Container(
+    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    padding: const EdgeInsets.all(20.0),
+    child: GestureDetector(
+      onTap: () {
+        // Navigasi ke halaman detail produk
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailPage(
+              product: snapshot.data![index], // Mengirimkan produk yang dipilih
+            ),
+          ),
+        );
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            snapshot.data![index].fields.name,
+            style: const TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text("${snapshot.data![index].fields.name}"),
+          const SizedBox(height: 10),
+          Text("${snapshot.data![index].fields.price}"),
+          const SizedBox(height: 10),
+          Text("${snapshot.data![index].fields.description}")
+        ],
+      ),
+    ),
+  ),
+)
+```
+## Update Halaman Daftar Produk 
+Pastikan bahwa halaman daftar produk tetap berjalan seperti sebelumnya tetapi dengan tambahan navigasi ke halaman detail
+``` dart
+class ProductEntryPage extends StatefulWidget {
+  const ProductEntryPage({super.key});
+
+  @override
+  State<ProductEntryPage> createState() => _ProductEntryPageState();
+}
+
+class _ProductEntryPageState extends State<ProductEntryPage> {
+  Future<List<ProductEntry>> fetchProduct(CookieRequest request) async {
+    final response = await request.get('http://127.0.0.1:8000/json/');
+    var data = response;
+    
+    List<ProductEntry> listProduct = [];
+    for (var d in data) {
+      if (d != null) {
+        listProduct.add(ProductEntry.fromJson(d));
+      }
+    }
+    return listProduct;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Skivy Entry List'),
+      ),
+      drawer: const LeftDrawer(),
+      body: FutureBuilder(
+        future: fetchProduct(request),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.data == null) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            if (!snapshot.hasData) {
+              return const Column(
+                children: [
+                  Text(
+                    'Belum ada data product pada Skivy.',
+                    style: TextStyle(fontSize: 20, color: Color(0xff59A5D8)),
+                  ),
+                  SizedBox(height: 8),
+                ],
+              );
+            } else {
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (_, index) => Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.all(20.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductDetailPage(
+                            product: snapshot.data![index], // Mengirimkan produk yang dipilih
+                          ),
+                        ),
+                      );
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          snapshot.data![index].fields.name,
+                          style: const TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text("${snapshot.data![index].fields.name}"),
+                        const SizedBox(height: 10),
+                        Text("${snapshot.data![index].fields.price}"),
+                        const SizedBox(height: 10),
+                        Text("${snapshot.data![index].fields.description}")
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }
+          }
+        },
+      ),
+    );
+  }
+}
+```
+
+## Melakukan Filter pada Halaman Daftar Item dengan Hanya Menampilkan Item yang Terasosiasi dengan Pengguna yang Login
+Pertama menyimpan informasi pengguna yang login, pada aplikasi ini pengguna yang login akan memiliki ID atau informasi yang dapat digunakan untuk memfilter produk, kita dapat mengakses informasi pengguna yang login melalui sesi atau token yang diberikan dengan `pbp_django_auth`. Pada backend Django kita juga perlu memastikan bahwa hanya item yang terkait dengan pengguna yang login yang dikirimkan dalam respons JSON. Misalnya, jika setiap produk memiliki atribut user yang mengacu pada ID pengguna, maka kita perlu memodifikasi query API untuk hanya mengembalikan produk yang sesuai dengan ID pengguna yang aktif. Setelah mendapatkan daftar produk yang telah difilter berdasarkan pengguna yang login, kita bisa melanjutkan untuk menampilkan daftar produk tersebut
+
+
+## Menjawab Pertanyaan
+### Mengapa Perlu Membuat Model untuk Pengambilan atau Pengiriman Data JSON?
 Model berfungsi sebagai representasi struktural dari data yang dikirim dan diterima, memastikan bahwa data yang diterima dari server atau dikirim ke server sesuai dengan format yang diharapkan. Dengan model, kita dapat memvalidasi dan mengatur data JSON menjadi objek yang mudah digunakan dalam aplikasi. Jika tidak membuat model terlebih dahulu, data yang diterima mungkin sulit diakses atau diproses, yang berpotensi menyebabkan error atau data yang tidak konsisten.
 
 Jika kita tidak membuat model terlebih dahulu, kita tetap dapat melakukan parsing manual terhadap data JSON, tetapi ini bisa menyebabkan kode menjadi lebih kompleks, rentan terhadap kesalahan, dan sulit dikelola. Error dapat terjadi jika struktur JSON berubah atau data diakses dengan cara yang salah, karena tidak ada tipe data yang terdefinisi dengan baik.
 
-## Fungsi Library `http`
+### Fungsi Library `http`
 Library `http` di Flutter berfungsi untuk mengirim dan menerima data melalui protokol HTTP. Ini memungkinkan aplikasi melakukan permintaan HTTP seperti `GET`, `POST`, `PUT`, dan `DELETE` ke server. Pada tugas ini, `http` digunakan untuk membuat koneksi ke server Django untuk mengambil data dan mengirim data seperti hasil formulir pengguna.
 
-## Fungsi `CookieRequest` dan Pembagiannya
+### Fungsi `CookieRequest` dan Pembagiannya
 `CookieRequest` adalah kelas yang digunakan untuk menangani permintaan HTTP yang membutuhkan sesi berbasis cookie. Ini memudahkan pengelolaan sesi login pengguna, sehingga sesi dapat dipertahankan di seluruh aplikasi. Penting untuk membagikan instance `CookieRequest` ke semua komponen agar data sesi konsisten di seluruh aplikasi dan fitur autentikasi dapat berfungsi dengan baik, seperti melacak status login pengguna.
 
-## Mekanisme Pengiriman Data dari Input ke Tampilan
+### Mekanisme Pengiriman Data dari Input ke Tampilan
 1. Pengguna mengisi formulir di Flutter dan menekan tombol submit.
 2. Aplikasi memvalidasi input dan mengirimkan data menggunakan permintaan HTTP (misalnya `POST`) melalui `CookieRequest` atau `http`.
 3. Data diterima oleh server Django, diproses, dan disimpan di database.
 Server mengembalikan respons (biasanya dalam format JSON) yang diolah di Flutter.
 4. Data yang dikembalikan ditampilkan pada antarmuka pengguna di aplikasi Flutter.
 
-## Mekanisme Autentikasi (Login, Register, Logout)
+### Mekanisme Autentikasi (Login, Register, Logout)
 - Login: Pengguna memasukkan kredensial (username dan password) di Flutter. Permintaan dikirim ke server Django untuk diverifikasi. Jika berhasil, server mengembalikan cookie sesi yang disimpan oleh CookieRequest di Flutter, menandakan bahwa pengguna telah berhasil login.
 
 - Register: Pengguna memasukkan data akun di formulir Flutter dan data dikirim ke endpoint Django untuk membuat akun baru. Jika berhasil, akun baru dibuat di database.
