@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:skivy_mobile/widgets/left_drawer.dart';
+import 'package:skivy_mobile/widgets/product_card.dart';
 
 class MyHomePage extends StatelessWidget {
   final String npm = '2306230685';
@@ -19,6 +21,7 @@ class MyHomePage extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
+      drawer: const LeftDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -101,6 +104,7 @@ class InfoCard extends StatelessWidget {
     );
   }
 }
+<<<<<<< HEAD:lib/menu.dart
 
 class ItemHomepage {
   final int number;
@@ -164,3 +168,5 @@ class ItemCard extends StatelessWidget {
     );
   }
 }
+=======
+>>>>>>> 0fe97608e9c74101804a2ec9886ead3579cf0110:lib/screens/menu.dart
