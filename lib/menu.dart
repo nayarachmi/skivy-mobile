@@ -68,9 +68,9 @@ class MyHomePage extends StatelessWidget {
 }
 
 final List<ItemHomepage> items = [
-  ItemHomepage("Lihat Product", Icons.shopping_bag),   // Updated icon
-  ItemHomepage("Tambah Product", Icons.add_circle),    // Updated icon
-  ItemHomepage("Logout", Icons.exit_to_app),           // Updated icon
+  ItemHomepage(number: 1, name:"Lihat Product", icon: Icons.shopping_bag),   // Updated icon
+  ItemHomepage(number: 2, name:"Tambah Product", icon: Icons.add_circle),    // Updated icon
+  ItemHomepage(number: 3, name:"Logout", icon: Icons.exit_to_app),           // Updated icon
 ];
 
 
@@ -103,10 +103,11 @@ class InfoCard extends StatelessWidget {
 }
 
 class ItemHomepage {
+  final int number;
   final String name;
   final IconData icon;
 
-  ItemHomepage(this.name, this.icon);
+  ItemHomepage({required this.number, required this.name, required this.icon});
 }
 
 class ItemCard extends StatelessWidget {
@@ -141,6 +142,9 @@ class ItemCard extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Text(
+                  item.number.toString(),
+                ),
                 Icon(
                   item.icon,
                   color: Colors.white,
